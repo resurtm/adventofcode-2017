@@ -79,7 +79,7 @@ func solvePartTwo(val string) int {
 			panic(err)
 		}
 
-		nextIdx := (i + len(val)/2 ) % len(val)
+		nextIdx := (i + len(val)/2) % len(val)
 		if nextIdx == len(val) {
 			nextIdx = 0
 		}
