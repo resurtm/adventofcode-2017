@@ -11,7 +11,8 @@ func main() {
 	}
 	switch os.Args[1] {
 	case "--problem1":
-		problem1.Run()
+		problem1.RunPartOne()
+		problem1.RunPartTwo()
 	default:
 		panic("nothing to do")
 	}
