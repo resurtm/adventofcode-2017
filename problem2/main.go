@@ -9,7 +9,7 @@ type testCase struct {
 	result int
 }
 
-var testCases = []testCase{
+var testCasesPartOne = []testCase{
 	{
 		input: [][]int{
 			{5, 1, 9, 5},
@@ -41,17 +41,38 @@ var testCases = []testCase{
 	},
 }
 
-func Run() {
-	fmt.Printf("run:\n\n")
+var testCasesPartTwo = []testCase{
+	{
+		input: [][]int{
+			{5, 9, 2, 8},
+			{9, 4, 7, 3},
+			{3, 8, 6, 5},
+		},
+		result: 9,
+	},
+}
 
-	for k, v := range testCases {
+func RunPartOne() {
+	fmt.Printf("PART ONE:\n\n")
+
+	for k, v := range testCasesPartOne {
 		fmt.Printf("test case %d:\n", k+1)
 		fmt.Printf("%#v\n", v)
-		fmt.Printf("result: %#v\n\n", v.solve())
+		fmt.Printf("result: %#v\n\n", v.solvePartOne())
 	}
 }
 
-func (tc *testCase) solve() int {
+func RunPartTwo() {
+	fmt.Printf("PART TWO:\n\n")
+
+	for k, v := range testCasesPartTwo {
+		fmt.Printf("test case %d:\n", k+1)
+		fmt.Printf("%#v\n", v)
+		fmt.Printf("result: %#v\n\n", v.solvePartOne())
+	}
+}
+
+func (tc *testCase) solvePartOne() int {
 	result := 0
 	for _, row := range tc.input {
 		min, max := minMax(row)
@@ -60,15 +81,19 @@ func (tc *testCase) solve() int {
 	return result
 }
 
-func minMax(array []int) (int, int) {
-	var max int = array[0]
-	var min int = array[0]
-	for _, value := range array {
-		if max < value {
-			max = value
+func (tc *testCase) solvePartTwo() int {
+	result := 0
+	return result
+}
+
+func minMax(arr []int) (int, int) {
+	min, max := arr[0], arr[0]
+	for _, v := range arr {
+		if max < v {
+			max = v
 		}
-		if min > value {
-			min = value
+		if min > v {
+			min = v
 		}
 	}
 	return min, max

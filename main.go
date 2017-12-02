@@ -15,7 +15,8 @@ func main() {
 		problem1.RunPartOne()
 		problem1.RunPartTwo()
 	case "--problem2":
-		problem2.Run()
+		problem2.RunPartOne()
+		problem2.RunPartTwo()
 	default:
 		panic("nothing to do")
 	}
