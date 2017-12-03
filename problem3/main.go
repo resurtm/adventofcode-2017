@@ -19,13 +19,17 @@ var testCasesPartOne = []testCase{
 }
 
 var testCasesPartTwo = []testCase{
-	{result: -1},
+	{input: 11, result: 23},
+	{input: 747, result: 806},
+	{input: 277678, result: -1},
 }
 
 func RunPartOne() {
+	return
 	fmt.Printf("PART ONE:\n\n")
 	for k, v := range testCasesPartOne {
 		fmt.Printf("test case %d:\n", k+1)
+		fmt.Printf("input: %d\n", v.input)
 		fmt.Printf("result: %d\n", v.result)
 		fmt.Printf("%#v\n", v)
 		fmt.Printf("result: %d\n\n", v.solvePartOne())
@@ -33,13 +37,13 @@ func RunPartOne() {
 }
 
 func RunPartTwo() {
-	return
 	fmt.Printf("PART TWO:\n\n")
 	for k, v := range testCasesPartTwo {
 		fmt.Printf("test case %d:\n", k+1)
-		fmt.Printf("result %d:\n", v.result)
+		fmt.Printf("input: %d\n", v.input)
+		fmt.Printf("result: %d\n", v.result)
 		fmt.Printf("%#v\n", v)
-		fmt.Printf("result: %#v\n\n", v.solvePartTwo())
+		fmt.Printf("result: %d\n\n", v.solvePartTwo())
 	}
 }
 
@@ -97,9 +101,9 @@ func (tc *testCase) solvePartOne() int {
 		dirN += 1
 		dir = directions[dirN]
 
-		if (currX == size || currY == size || currX == -1 || currY == -1) {
-			break
-		}
+		//if (currX == size || currY == size || currX == -1 || currY == -1) {
+		//	break
+		//}
 	}
 
 	//fmt.Println(number)
@@ -110,7 +114,74 @@ func (tc *testCase) solvePartOne() int {
 }
 
 func (tc *testCase) solvePartTwo() int {
-	return 0
+	const (
+		right    = iota
+		up
+		left
+		down
+		resetDir
+	)
+
+	directions, direction := []int{}, right
+	for i := 1; i < 10000; i += 1 {
+		for k := 0; k < 2; k++ {
+			for j := 0; j < i; j++ {
+				directions = append(directions, direction)
+			}
+			direction += 1
+			if direction == resetDir {
+				direction = right
+			}
+		}
+	}
+
+	const size = 10000
+	elems := make([][]int, size)
+	for i := range elems {
+		elems[i] = make([]int, size)
+	}
+
+	currX, currY := int(size/2), int(size/2)
+	dirN, dir := 0, directions[0]
+	number := 1
+
+	for {
+		if number > tc.input {
+			break
+		}
+
+		elems[currX][currY] = number
+		//fmt.Println(number)
+		//time.Sleep(time.Millisecond * 100)
+
+		switch dir {
+		case right:
+			currX += 1
+		case up:
+			currY -= 1
+		case left:
+			currX -= 1
+		case down:
+			currY += 1
+		}
+
+		number = elems[currX+1][currY] + elems[currX-1][currY] +
+			elems[currX+1][currY+1] + elems[currX-1][currY-1] +
+			elems[currX][currY+1] + elems[currX][currY-1] +
+			elems[currX-1][currY+1] + elems[currX+1][currY-1]
+
+		dirN += 1
+		dir = directions[dirN]
+
+		//if (currX == size || currY == size || currX == -1 || currY == -1) {
+		//	break
+		//}
+	}
+
+	//fmt.Println(number)
+	//printElems(elems)
+
+	return number
 }
 
 func printElems(elems [][]int) {
