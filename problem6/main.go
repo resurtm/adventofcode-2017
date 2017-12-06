@@ -16,6 +16,8 @@ var testCasesPartOne = []testCase{
 }
 
 var testCasesPartTwo = []testCase{
+	{input: []int{0, 2, 7, 0}, result: 4},
+	{input: []int{10, 3, 15, 10, 5, 15, 5, 15, 9, 2, 5, 8, 5, 2, 3, 6}, result: -1},
 }
 
 func RunPartOne() {
@@ -57,14 +59,14 @@ func (tc *testCase) solvePartOne() int {
 
 Loop:
 	for /*ii := 0; ii < 5; ii++*/ {
-		fmt.Printf("%#v\n", arr)
+		//fmt.Printf("%#v\n", arr)
 
 		maxVal, maxPos := findMax(arr)
 
 		arr[maxPos] = 0
 		chunks := divideSlice(maxVal, arrLen)
-		fmt.Printf("%#v\n", chunks)
-		fmt.Printf("-------------------\n")
+		//fmt.Printf("%#v\n", chunks)
+		//fmt.Printf("-------------------\n")
 		for chK, chV := range chunks {
 			effectivePos := (maxPos + 1 + chK) % arrLen
 			arr[effectivePos] += chV
@@ -72,9 +74,8 @@ Loop:
 
 		cacheKey := buildKey(arr)
 
-		for tmpK, tmpV := range cache {
+		for _, tmpV := range cache {
 			if tmpV == cacheKey {
-				result = steps - tmpK
 				result = steps
 				break Loop
 			}
@@ -89,7 +90,44 @@ Loop:
 }
 
 func (tc *testCase) solvePartTwo() int {
-	return 0
+	arr := make([]int, len(tc.input))
+	copy(arr, tc.input)
+	arrLen := len(arr)
+
+	cache := make([]string, 0)
+
+	steps, result := 1, 0
+
+Loop:
+	for /*ii := 0; ii < 5; ii++*/ {
+		//fmt.Printf("%#v\n", arr)
+
+		maxVal, maxPos := findMax(arr)
+
+		arr[maxPos] = 0
+		chunks := divideSlice(maxVal, arrLen)
+		//fmt.Printf("%#v\n", chunks)
+		//fmt.Printf("-------------------\n")
+		for chK, chV := range chunks {
+			effectivePos := (maxPos + 1 + chK) % arrLen
+			arr[effectivePos] += chV
+		}
+
+		cacheKey := buildKey(arr)
+
+		for tmpK, tmpV := range cache {
+			if tmpV == cacheKey {
+				result = steps - tmpK - 1
+				break Loop
+			}
+		}
+
+		cache = append(cache, cacheKey)
+		steps++
+	}
+
+	//fmt.Println(len(cache))
+	return result
 }
 
 func findMax(arr []int) (val, pos int) {
