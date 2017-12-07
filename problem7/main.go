@@ -2252,7 +2252,7 @@ func walkTree2(leaf *treeLeaf) {
 				max = elem.weightAccum
 			}
 		}
-		if max - min == 0 {
+		if max-min == 0 {
 			walkTree2Found = leaf
 			break
 		}
