@@ -23,3 +23,7 @@
 [[constraint]]
   branch = "master"
   name = "github.com/meirf/gopart"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/kr/pretty"
