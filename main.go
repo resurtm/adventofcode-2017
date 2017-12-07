@@ -8,6 +8,7 @@ import (
 	"github.com/resurtm/adventofcode-2017/problem4"
 	"github.com/resurtm/adventofcode-2017/problem5"
 	"github.com/resurtm/adventofcode-2017/problem6"
+	"github.com/resurtm/adventofcode-2017/problem7"
 )
 
 func main() {
@@ -33,6 +34,9 @@ func main() {
 	case "--problem6":
 		problem6.RunPartOne()
 		problem6.RunPartTwo()
+	case "--problem7":
+		problem7.RunPartOne()
+		problem7.RunPartTwo()
 	default:
 		panic("nothing to do")
 	}

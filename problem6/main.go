@@ -144,7 +144,7 @@ func findMax(arr []int) (val, pos int) {
 func divideSlice(val, parts int) []int {
 	chunks := make([]int, parts)
 	for i := 0; val > 0; i++ {
-		chunks[i % parts] += 1
+		chunks[i%parts] += 1
 		val--
 	}
 	return chunks
