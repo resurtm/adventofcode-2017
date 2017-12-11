@@ -2,7 +2,6 @@ package main
 
 import (
 	"os"
-	"github.com/resurtm/adventofcode-2017/problem10"
 	"github.com/resurtm/adventofcode-2017/problem01"
 	"github.com/resurtm/adventofcode-2017/problem02"
 	"github.com/resurtm/adventofcode-2017/problem03"
@@ -12,6 +11,8 @@ import (
 	"github.com/resurtm/adventofcode-2017/problem07"
 	"github.com/resurtm/adventofcode-2017/problem08"
 	"github.com/resurtm/adventofcode-2017/problem09"
+	"github.com/resurtm/adventofcode-2017/problem10"
+	"github.com/resurtm/adventofcode-2017/problem11"
 )
 
 func main() {
@@ -58,6 +59,9 @@ func main() {
 	case "--problem10":
 		problem10.RunPartOne()
 		problem10.RunPartTwo()
+	case "--problem11":
+		problem11.RunPartOne()
+		problem11.RunPartTwo()
 	default:
 		panic("nothing to do")
 	}
