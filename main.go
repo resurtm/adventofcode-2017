@@ -2,16 +2,16 @@ package main
 
 import (
 	"os"
-	"github.com/resurtm/adventofcode-2017/problem1"
-	"github.com/resurtm/adventofcode-2017/problem2"
-	"github.com/resurtm/adventofcode-2017/problem3"
-	"github.com/resurtm/adventofcode-2017/problem4"
-	"github.com/resurtm/adventofcode-2017/problem5"
-	"github.com/resurtm/adventofcode-2017/problem6"
-	"github.com/resurtm/adventofcode-2017/problem7"
-	"github.com/resurtm/adventofcode-2017/problem8"
-	"github.com/resurtm/adventofcode-2017/problem9"
 	"github.com/resurtm/adventofcode-2017/problem10"
+	"github.com/resurtm/adventofcode-2017/problem01"
+	"github.com/resurtm/adventofcode-2017/problem02"
+	"github.com/resurtm/adventofcode-2017/problem03"
+	"github.com/resurtm/adventofcode-2017/problem04"
+	"github.com/resurtm/adventofcode-2017/problem05"
+	"github.com/resurtm/adventofcode-2017/problem06"
+	"github.com/resurtm/adventofcode-2017/problem07"
+	"github.com/resurtm/adventofcode-2017/problem08"
+	"github.com/resurtm/adventofcode-2017/problem09"
 )
 
 func main() {
@@ -20,32 +20,41 @@ func main() {
 	}
 	switch os.Args[1] {
 	case "--problem1":
-		problem1.RunPartOne()
-		problem1.RunPartTwo()
+	case "--problem01":
+		problem01.RunPartOne()
+		problem01.RunPartTwo()
 	case "--problem2":
-		problem2.RunPartOne()
-		problem2.RunPartTwo()
+	case "--problem02":
+		problem02.RunPartOne()
+		problem02.RunPartTwo()
 	case "--problem3":
-		problem3.RunPartOne()
-		problem3.RunPartTwo()
+	case "--problem03":
+		problem03.RunPartOne()
+		problem03.RunPartTwo()
 	case "--problem4":
-		problem4.RunPartOne()
-		problem4.RunPartTwo()
+	case "--problem04":
+		problem04.RunPartOne()
+		problem04.RunPartTwo()
 	case "--problem5":
-		problem5.RunPartOne()
-		problem5.RunPartTwo()
+	case "--problem05":
+		problem05.RunPartOne()
+		problem05.RunPartTwo()
 	case "--problem6":
-		problem6.RunPartOne()
-		problem6.RunPartTwo()
+	case "--problem06":
+		problem06.RunPartOne()
+		problem06.RunPartTwo()
 	case "--problem7":
-		problem7.RunPartOne()
-		problem7.RunPartTwo()
+	case "--problem07":
+		problem07.RunPartOne()
+		problem07.RunPartTwo()
 	case "--problem8":
-		problem8.RunPartOne()
-		problem8.RunPartTwo()
+	case "--problem08":
+		problem08.RunPartOne()
+		problem08.RunPartTwo()
 	case "--problem9":
-		problem9.RunPartOne()
-		problem9.RunPartTwo()
+	case "--problem09":
+		problem09.RunPartOne()
+		problem09.RunPartTwo()
 	case "--problem10":
 		problem10.RunPartOne()
 		problem10.RunPartTwo()

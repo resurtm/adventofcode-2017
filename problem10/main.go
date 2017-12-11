@@ -26,6 +26,7 @@ var testCasesPartTwo = []testCase2{
 	{input: `AoC 2017`, result: `33efeb34ea91902bb2f59c9920caa6cd`},
 	{input: `1,2,3`, result: `3efbe78a8d82f29979031a4aa0b16a9d`},
 	{input: `1,2,4`, result: `63960835bcdc130f0b66d7ff4f6a5a8e`},
+	{input: `106,16,254,226,55,2,1,166,177,247,93,0,255,228,60,36`, result: `7adfd64c2a3a4968cf78d1b7fd418d`},
 	{input: `76,1,88,148,166,217,130,0,128,254,16,2,130,71,255,229`, result: ``},
 }
 
