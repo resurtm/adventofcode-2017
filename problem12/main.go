@@ -3,6 +3,7 @@ package problem12
 import (
 	"fmt"
 	"strings"
+	"sort"
 )
 
 type testCase struct {
@@ -123,5 +124,33 @@ func traverse(check string, accum []string) []string {
 }
 
 func (tc *testCase) solvePartTwo() int {
-	return 0
+	graph = map[string][]string{}
+	store = []linkEntry{}
+
+	for _, entry := range tc.input {
+		tmp := strings.Split(entry, " <-> ")
+		lv := tmp[0]
+		tmp = strings.Split(tmp[1], ", ")
+
+		for _, tmpItem := range tmp {
+			store = append(store, linkEntry{lv, tmpItem})
+		}
+	}
+
+	for _, storeItem := range store {
+		_, ok1 := graph[storeItem.a]
+		_, ok2 := graph[storeItem.b]
+		if ok1 || ok2 {
+			continue
+		}
+		graph[storeItem.a] = traverse(storeItem.a, []string{})
+	}
+
+	groups := map[string]bool{}
+	for _, graphItem := range graph {
+		sort.Strings(graphItem)
+		groups[strings.Join(graphItem, ",")] = true
+	}
+
+	return len(groups)
 }
