@@ -2,6 +2,8 @@ package problem13
 
 import (
 	"fmt"
+	"strings"
+	"strconv"
 )
 
 type testCase struct {
@@ -17,8 +19,8 @@ var testCasesPartOne = []testCase{
 }
 
 var testCasesPartTwo = []testCase{
-	{input: []string{"0: 3", "1: 2", "4: 4", "6: 4"}, result: 24},
-	commonTestCase,
+	//{input: []string{"0: 3", "1: 2", "4: 4", "6: 4"}, result: 24},
+	//commonTestCase,
 }
 
 func RunPartOne() {
@@ -54,7 +56,75 @@ func RunPartTwo() {
 }
 
 func (tc *testCase) solvePartOne() int {
-	return 0
+	heights := map[int]int{}
+	maxLayer := 0
+	for _, input := range tc.input {
+		tmp := strings.Split(input, ": ")
+		layer, _ := strconv.Atoi(tmp[0])
+		height, _ := strconv.Atoi(tmp[1])
+		if maxLayer < layer {
+			maxLayer = layer
+		}
+		heights[layer] = height
+	}
+
+	states := map[int]int{}
+	dirs := map[int]bool{}
+	for i := 0; i <= maxLayer; i++ {
+		states[i] = 0
+		dirs[i] = true
+		_, ok := heights[i]
+		if ok {
+			continue
+		}
+		heights[i] = 0
+	}
+
+	myPos := 0
+	//skipped := false
+	inters := []int{}
+
+	for {
+		if myPos > maxLayer {
+			break
+		}
+
+		if states[myPos] == 0 && heights[myPos] != 0 {
+			inters = append(inters, myPos)
+		}
+
+		for layer := 0; layer <= maxLayer; layer++ {
+			if heights[layer] == 0 {
+				continue
+			}
+
+			if dirs[layer] {
+				states[layer]++
+			} else {
+				states[layer]--
+			}
+
+			if states[layer] == 0 || states[layer] == heights[layer]-1 {
+				dirs[layer] = !dirs[layer]
+			}
+		}
+
+		//if !skipped && heights[myPos] == 0 {
+		//	skipped = true
+		//} else {
+		//	myPos++
+		//	skipped = false
+		//}
+
+		myPos++
+	}
+
+	result := 0
+	for _, inter := range inters {
+		result += inter * heights[inter]
+	}
+
+	return result
 }
 
 func (tc *testCase) solvePartTwo() int {
