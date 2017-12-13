@@ -81,7 +81,6 @@ func (tc *testCase) solvePartOne() int {
 	}
 
 	myPos := 0
-	//skipped := false
 	inters := []int{}
 
 	for {
@@ -108,13 +107,6 @@ func (tc *testCase) solvePartOne() int {
 				dirs[layer] = !dirs[layer]
 			}
 		}
-
-		//if !skipped && heights[myPos] == 0 {
-		//	skipped = true
-		//} else {
-		//	myPos++
-		//	skipped = false
-		//}
 
 		myPos++
 	}
