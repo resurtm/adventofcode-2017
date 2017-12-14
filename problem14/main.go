@@ -17,7 +17,8 @@ var testCasesPartOne = []testCase{
 }
 
 var testCasesPartTwo = []testCase{
-
+	{input: "flqrgnkx", result: 1242},
+	{input: "hfdlxzhv", result: -1},
 }
 
 func RunPartOne() {
@@ -65,8 +66,38 @@ func (tc *testCase) solvePartOne() int {
 	return cnt
 }
 
+var grid = [128][128]int{}
+
 func (tc *testCase) solvePartTwo() int {
-	return 0
+	for i := 0; i < 128; i++ {
+		row := hexToBin(knotHash(tc.input + "-" + strconv.Itoa(i)))
+		for j, rowItem := range row {
+			if string(rowItem) == "1" {
+				grid[i][j] = 0
+			} else {
+				grid[i][j] = -1
+			}
+		}
+	}
+
+}
+
+func walk(i, j int) {
+	if grid[i][j] == 0 {
+		grid[i][j] = 1
+	}
+	if i >= 1 && grid[i-1][j] == 0 {
+		walk(i-1, j)
+	}
+	if j >= 1 && grid[i][j-1] == 0 {
+		walk(i, j-1)
+	}
+	if i < 127 && grid[i+1][j] == 0 {
+		walk(i+1, j)
+	}
+	if j < 127 && grid[i][j+1] == 0 {
+		walk(i, j+1)
+	}
 }
 
 func knotHash(inp string) string {
