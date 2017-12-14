@@ -1,34 +1,23 @@
-package problem10
+package problem14
 
 import (
 	"fmt"
+	"strings"
 	"strconv"
 )
 
-type testCase1 struct {
-	input       []int
-	stdListSize int
-	result      int
-}
-
-type testCase2 struct {
+type testCase struct {
 	input  string
-	result string
+	result int
 }
 
-var testCasesPartOne = []testCase1{
-	{input: []int{3, 4, 1, 5}, stdListSize: 5, result: 12},
-	{input: []int{76, 1, 88, 148, 166, 217, 130, 0, 128, 254, 16, 2, 130, 71, 255, 229}, stdListSize: 256, result: -1},
+var testCasesPartOne = []testCase{
+	{input: "flqrgnkx", result: 8108},
+	{input: "hfdlxzhv", result: -1},
 }
 
-var testCasesPartTwo = []testCase2{
-	{input: ``, result: `a2582a3a0e66e6e86e3812dcb672a272`},
-	{input: `AoC 2017`, result: `33efeb34ea91902bb2f59c9920caa6cd`},
-	{input: `a0c2017`, result: `e1eda8a81b7e7276f6387faca3682992`},
-	{input: `1,2,3`, result: `3efbe78a8d82f29979031a4aa0b16a9d`},
-	{input: `1,2,4`, result: `63960835bcdc130f0b66d7ff4f6a5a8e`},
-	{input: `106,16,254,226,55,2,1,166,177,247,93,0,255,228,60,36`, result: `7adfd64c2a3a4968cf78d1b7fd418d`},
-	{input: `76,1,88,148,166,217,130,0,128,254,16,2,130,71,255,229`, result: ``},
+var testCasesPartTwo = []testCase{
+
 }
 
 func RunPartOne() {
@@ -56,63 +45,39 @@ func RunPartTwo() {
 		} else {
 			fmt.Printf("input     : %#v\n", v.input)
 		}
-		fmt.Printf("expected  : %s\n", v.result)
+		fmt.Printf("expected  : %d\n", v.result)
 		fmt.Print("result    : ")
 		fmt.Print(v.solvePartTwo())
 		fmt.Print("\n\n")
 	}
 }
 
-func (tc *testCase1) solvePartOne() int {
-	lst := []int{}
-	for i := 0; i < tc.stdListSize; i++ {
-		lst = append(lst, i)
-	}
-
-	currPos := 0
-	skipSize := 0
-
-	for _, length := range tc.input {
-		// step 1
-		tmpLst := []int{}
-		for i, j := 0, currPos; i < length; i, j = i+1, j+1 {
-			tmpLst = append(tmpLst, lst[j])
-			if j == len(lst)-1 {
-				j = -1
+func (tc *testCase) solvePartOne() int {
+	cnt := 0
+	for i := 0; i < 128; i++ {
+		row := hexToBin(knotHash(tc.input + "-" + strconv.Itoa(i)))
+		for _, rowItem := range row {
+			if string(rowItem) == "1" {
+				cnt++
 			}
 		}
-		tmpLst = reverseInts(tmpLst)
-
-		// step 2
-		tmpLstIdx := currPos
-		for _, tmpLstItem := range tmpLst {
-			lst[tmpLstIdx] = tmpLstItem
-			tmpLstIdx++
-			if tmpLstIdx == len(lst) {
-				tmpLstIdx = 0
-			}
-		}
-
-		// step 3
-		currPos += length + skipSize
-		currPos %= len(lst)
-		skipSize++
 	}
-
-	return lst[0] * lst[1]
+	return cnt
 }
 
-func (tc *testCase2) solvePartTwo() string {
+func (tc *testCase) solvePartTwo() int {
+	return 0
+}
+
+func knotHash(inp string) string {
 	input := []int32{}
-	for _, x := range tc.input {
+	for _, x := range inp {
 		input = append(input, x)
 	}
 	inputAdd := []int32{17, 31, 73, 47, 23}
 	for _, x := range inputAdd {
 		input = append(input, x);
 	}
-
-	// ===================================
 
 	lst := []int32{}
 	for i := int32(0); i < 256; i++ {
@@ -151,20 +116,8 @@ func (tc *testCase2) solvePartTwo() string {
 		}
 	}
 
-	// ===================================
-
-	//fmt.Printf("%#v\n", lst)
-	//fmt.Printf("%#v\n", len(lst))
-
 	denseHash := denseHashCalc(lst)
-	return formatHash(denseHash)
-}
-
-func reverseInts(input []int) []int {
-	if len(input) == 0 {
-		return input
-	}
-	return append(reverseInts(input[1:]), input[0])
+	return strings.Replace(formatHash(denseHash), " ", "0", -1)
 }
 
 func reverseInts32(input []int32) []int32 {
@@ -172,11 +125,6 @@ func reverseInts32(input []int32) []int32 {
 		return input
 	}
 	return append(reverseInts32(input[1:]), input[0])
-}
-
-func getAscii(x int) int {
-	tmp := strconv.Itoa(x)
-	return int([]rune(tmp)[0])
 }
 
 func denseHashCalc(inp []int32) []int32 {
@@ -202,4 +150,17 @@ func formatHash(inp []int32) string {
 		res += fmted
 	}
 	return res
+}
+
+func hexToBin(hex string) string {
+	lookup := [16]string{
+		"0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111",
+		"1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111",
+	}
+	result := ""
+	for _, val := range hex {
+		vl, _ := strconv.ParseUint(string(val), 16, 64)
+		result += lookup[vl]
+	}
+	return result
 }
