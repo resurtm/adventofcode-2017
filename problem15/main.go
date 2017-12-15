@@ -5,18 +5,18 @@ import (
 )
 
 type testCase struct {
-	input1 int64
-	input2 int64
-	result int64
+	input1 uint
+	input2 uint
+	result uint
 }
 
 var testCasesPartOne = []testCase{
-	{input1: 65, input2: 8921, result: 588},
-	{input1: 783, input2: 325, result: 650},
+	//{input1: 65, input2: 8921, result: 588},
+	//{input1: 783, input2: 325, result: 650},
 }
 
 var testCasesPartTwo = []testCase{
-	{input1: 65, input2: 8921, result: 309},
+	//{input1: 65, input2: 8921, result: 309},
 	{input1: 783, input2: 325, result: 336},
 }
 
@@ -57,7 +57,7 @@ func (tc *testCase) solvePartOne() int {
 		gena %= 2147483647
 		genb %= 2147483647
 
-		if gena-int64(gena>>16<<16) == genb-int64(genb>>16<<16) {
+		if gena-gena>>16<<16 == genb-genb>>16<<16 {
 			cnt++
 		}
 	}
@@ -69,16 +69,16 @@ func (tc *testCase) solvePartTwo() int {
 	genb := tc.input2
 	cnt := 0
 	iter := 0
-	fa := int64(-1)
-	fb := int64(-1)
+	fa := uint(0)
+	fb := uint(0)
 
 	for {
-		if fa == -1 {
+		if fa == 0 {
 			gena *= 16807
 			gena %= 2147483647
 		}
 
-		if fb == -1 {
+		if fb == 0 {
 			genb *= 48271
 			genb %= 2147483647
 		}
@@ -90,13 +90,13 @@ func (tc *testCase) solvePartTwo() int {
 			fb = genb
 		}
 
-		if fa != -1 && fb != -1 {
-			if fa-int64(fa>>16<<16) == fb-int64(fb>>16<<16) {
+		if fa != 0 && fb != 0 {
+			if fa-fa>>16<<16 == fb-fb>>16<<16 {
 				cnt++
 			}
 
-			fa = -1
-			fb = -1
+			fa = 0
+			fb = 0
 
 			iter++
 			if iter > 5000000 {
