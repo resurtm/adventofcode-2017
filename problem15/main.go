@@ -16,7 +16,10 @@ var testCasesPartOne = []testCase{
 	{input1: 783, input2: 325, result: 650},
 }
 
-var testCasesPartTwo = []testCase{}
+var testCasesPartTwo = []testCase{
+	{input1: 65, input2: 8921, result: 309},
+	{input1: 783, input2: 325, result: 336},
+}
 
 func RunPartOne() {
 	fmt.Printf(">>> PART ONE <<<\n\n")
@@ -66,5 +69,48 @@ func (tc *testCase) solvePartOne() int {
 }
 
 func (tc *testCase) solvePartTwo() int {
-	return 0
+	gena := tc.input1
+	genb := tc.input2
+	cnt := 0
+	iter := 0
+	fa := int64(-1)
+	fb := int64(-1)
+
+	for {
+		if fa == -1 {
+			gena *= 16807
+			gena %= 2147483647
+		}
+
+		if fb == -1 {
+			genb *= 48271
+			genb %= 2147483647
+		}
+
+		if gena%4 == 0 {
+			fa = gena
+		}
+		if genb%8 == 0 {
+			fb = genb
+		}
+
+		if fa != -1 && fb != -1 {
+			genas := fmt.Sprintf("%032s", strconv.FormatInt(fa, 2))
+			genbs := fmt.Sprintf("%032s", strconv.FormatInt(fb, 2))
+
+			if genas[16:] == genbs[16:] {
+				cnt++
+			}
+
+			fa = -1
+			fb = -1
+
+			iter++
+			if iter > 5000000 {
+				break
+			}
+		}
+	}
+
+	return cnt
 }
