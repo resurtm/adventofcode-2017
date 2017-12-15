@@ -11,12 +11,12 @@ type testCase struct {
 }
 
 var testCasesPartOne = []testCase{
-	//{input1: 65, input2: 8921, result: 588},
-	//{input1: 783, input2: 325, result: 650},
+	{input1: 65, input2: 8921, result: 588},
+	{input1: 783, input2: 325, result: 650},
 }
 
 var testCasesPartTwo = []testCase{
-	//{input1: 65, input2: 8921, result: 309},
+	{input1: 65, input2: 8921, result: 309},
 	{input1: 783, input2: 325, result: 336},
 }
 
