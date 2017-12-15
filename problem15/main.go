@@ -2,7 +2,6 @@ package problem15
 
 import (
 	"fmt"
-	"strconv"
 )
 
 type testCase struct {
@@ -58,10 +57,7 @@ func (tc *testCase) solvePartOne() int {
 		gena %= 2147483647
 		genb %= 2147483647
 
-		genas := fmt.Sprintf("%032s", strconv.FormatInt(gena, 2))
-		genbs := fmt.Sprintf("%032s", strconv.FormatInt(genb, 2))
-
-		if genas[16:] == genbs[16:] {
+		if gena-int64(gena>>16<<16) == genb-int64(genb>>16<<16) {
 			cnt++
 		}
 	}
@@ -95,10 +91,7 @@ func (tc *testCase) solvePartTwo() int {
 		}
 
 		if fa != -1 && fb != -1 {
-			genas := fmt.Sprintf("%032s", strconv.FormatInt(fa, 2))
-			genbs := fmt.Sprintf("%032s", strconv.FormatInt(fb, 2))
-
-			if genas[16:] == genbs[16:] {
+			if fa-int64(fa>>16<<16) == fb-int64(fb>>16<<16) {
 				cnt++
 			}
 
