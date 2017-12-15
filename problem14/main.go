@@ -79,7 +79,16 @@ func (tc *testCase) solvePartTwo() int {
 			}
 		}
 	}
-
+	cnt := 0
+	for i := 0; i < 128; i++ {
+		for j := 0; j < 128; j++ {
+			if grid[i][j] == 0 {
+				walk(i, j)
+				cnt++
+			}
+		}
+	}
+	return cnt
 }
 
 func walk(i, j int) {
