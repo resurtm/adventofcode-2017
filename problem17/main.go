@@ -42,7 +42,31 @@ func RunPartTwo() {
 }
 
 func (tc *testCase) solvePartOne() int {
-	return 0
+	vals := []int{0}
+	pos := 0
+
+	for i := 0; i < 2017; i++ {
+		//fmt.Println(vals)
+
+		for step := 0; step < tc.input; step++ {
+			pos++
+			if pos >= len(vals) {
+				pos = 0
+			}
+		}
+
+		pos++
+		vals = append(vals[:pos], append([]int{i + 1}, vals[pos:]...)...)
+	}
+
+	j := 0
+	for ; j < len(vals); j++ {
+		if vals[j] == 2017 {
+			break
+		}
+	}
+
+	return vals[j+1]
 }
 
 func (tc *testCase) solvePartTwo() int {
