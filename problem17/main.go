@@ -2,6 +2,7 @@ package problem17
 
 import (
 	"fmt"
+	"container/list"
 )
 
 type testCase struct {
@@ -11,10 +12,12 @@ type testCase struct {
 
 var testCasesPartOne = []testCase{
 	{input: 3, result: 638},
-	{input: 354, result: -1},
+	{input: 354, result: 2000},
 }
 
 var testCasesPartTwo = []testCase{
+	{input: 3, result: 1222153},
+	{input: 354, result: 10242889},
 }
 
 func RunPartOne() {
@@ -42,33 +45,71 @@ func RunPartTwo() {
 }
 
 func (tc *testCase) solvePartOne() int {
-	vals := []int{0}
-	pos := 0
+	vls := list.New()
+	vls.PushBack(0)
+	e := vls.Front()
 
 	for i := 0; i < 2017; i++ {
-		//fmt.Println(vals)
-
 		for step := 0; step < tc.input; step++ {
-			pos++
-			if pos >= len(vals) {
-				pos = 0
+			e = e.Next()
+			if e == nil {
+				e = vls.Front()
 			}
 		}
 
-		pos++
-		vals = append(vals[:pos], append([]int{i + 1}, vals[pos:]...)...)
-	}
-
-	j := 0
-	for ; j < len(vals); j++ {
-		if vals[j] == 2017 {
-			break
+		e = e.Next()
+		if e == nil {
+			e = vls.Front()
 		}
+
+		vls.InsertAfter(i+1, e)
 	}
 
-	return vals[j+1]
+	e = e.Next()
+	if e == nil {
+		e = vls.Front()
+	}
+	e = e.Next()
+	if e == nil {
+		e = vls.Front()
+	}
+
+	return (e.Value).(int)
 }
 
 func (tc *testCase) solvePartTwo() int {
-	return 0
+	vls := list.New()
+	vls.PushBack(0)
+	e := vls.Front()
+
+	for i := 0; i < 50000000; i++ {
+		//if i%100000 == 0 {
+		//	fmt.Println(i)
+		//}
+
+		for step := 0; step < tc.input; step++ {
+			e = e.Next()
+			if e == nil {
+				e = vls.Front()
+			}
+		}
+
+		e = e.Next()
+		if e == nil {
+			e = vls.Front()
+		}
+
+		vls.InsertAfter(i+1, e)
+	}
+
+	xx := vls.Front()
+	for ; xx != nil; xx = xx.Next() {
+		//fmt.Print(xx.Value, ",")
+		if xx.Value == 0 {
+			break
+		}
+	}
+	//fmt.Println()
+
+	return (xx.Next().Value).(int)
 }
