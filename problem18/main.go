@@ -2,6 +2,8 @@ package problem18
 
 import (
 	"fmt"
+	"strings"
+	"strconv"
 )
 
 type testCase struct {
@@ -42,7 +44,91 @@ func RunPartTwo() {
 }
 
 func (tc *testCase) solvePartOne() int {
-	return 0
+	curr := 0
+
+	lastSnd := 0
+	resultSnd := 0
+
+	regs := map[string]int{}
+	ensureReg := func(name string) {
+		if _, ok := regs[name]; !ok {
+			regs[name] = 0
+		}
+	}
+
+Loop:
+	for {
+		instr := tc.input[curr]
+
+		switch instr[:3] {
+		case "set":
+			parts := strings.Split(instr, " ")
+			ensureReg(parts[1])
+			val, err := strconv.Atoi(parts[2])
+			if err != nil {
+				regs[parts[1]] = regs[parts[2]]
+			} else {
+				regs[parts[1]] = val
+			}
+
+		case "add":
+			parts := strings.Split(instr, " ")
+			ensureReg(parts[1])
+			val, err := strconv.Atoi(parts[2])
+			if err != nil {
+				regs[parts[1]] += regs[parts[2]]
+			} else {
+				regs[parts[1]] += val
+			}
+
+		case "mul":
+			parts := strings.Split(instr, " ")
+			ensureReg(parts[1])
+			ensureReg(parts[2])
+			val, err := strconv.Atoi(parts[2])
+			if err != nil {
+				regs[parts[1]] *= regs[parts[2]]
+			} else {
+				regs[parts[1]] *= val
+			}
+
+		case "mod":
+			parts := strings.Split(instr, " ")
+			ensureReg(parts[1])
+			val, err := strconv.Atoi(parts[2])
+			if err != nil {
+				regs[parts[1]] %= regs[parts[2]]
+			} else {
+				regs[parts[1]] %= val
+			}
+
+		case "snd":
+			parts := strings.Split(instr, " ")
+			ensureReg(parts[1])
+			lastSnd = regs[parts[1]]
+
+		case "rcv":
+			parts := strings.Split(instr, " ")
+			ensureReg(parts[1])
+			if regs[parts[1]] != 0 {
+				resultSnd = lastSnd
+				break Loop
+			}
+
+		case "jgz":
+			parts := strings.Split(instr, " ")
+			ensureReg(parts[1])
+			val, _ := strconv.Atoi(parts[2])
+			if regs[parts[1]] > 0 {
+				curr += val
+				continue Loop
+			}
+		}
+
+		curr++
+	}
+
+	return resultSnd
 }
 
 func (tc *testCase) solvePartTwo() int {
