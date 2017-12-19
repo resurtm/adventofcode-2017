@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"bufio"
+	"strconv"
 )
 
 type testCase struct {
@@ -14,11 +15,13 @@ type testCase struct {
 }
 
 var testCasesPartOne = []testCase{
-	{input: "input0.txt", result: "ABCDEF"},
-	{input: "input1.txt", result: "-1"},
+	//{input: "input0.txt", result: "ABCDEF"},
+	//{input: "input1.txt", result: "-1"},
 }
 
 var testCasesPartTwo = []testCase{
+	//{input: "input0.txt", result: "38"},
+	{input: "input1.txt", result: "17358"},
 }
 
 func RunPartOne() {
@@ -129,7 +132,90 @@ func (tc *testCase) solvePartOne() string {
 }
 
 func (tc *testCase) solvePartTwo() string {
-	return ""
+	tiles := readInput(tc.input)
+
+	sx, sy := 0, 1
+
+	px, py := 0, 0
+	for i, m := range tiles[0] {
+		if m == '|' {
+			px = i
+		}
+	}
+
+	lookAround := func() (up, right, down, left byte) {
+		// up
+		if py > 0 && len(tiles[py-1]) > px && px >= 0 {
+			up = tiles[py-1][px]
+		} else {
+			up = ' '
+		}
+		// right
+		if len(tiles[py])-1 > px {
+			right = tiles[py][px+1]
+		} else {
+			right = ' '
+		}
+		// down
+		if len(tiles)-1 > py && px >= 0 && px < len(tiles[py+1]) {
+			down = tiles[py+1][px]
+		} else {
+			down = ' '
+		}
+		// left
+		if px > 0 {
+			left = tiles[py][px-1]
+		} else {
+			left = ' '
+		}
+		return
+	}
+
+	convAround := func() (up, right, down, left string) {
+		u, r, d, l := lookAround()
+		up, right = "<"+string(u)+">", "<"+string(r)+">"
+		down, left = "<"+string(d)+">", "<"+string(l)+">"
+		return
+	}
+
+	result := ""
+	steps := 0
+
+	for {
+		u, r, d, l := lookAround()
+		fmt.Println(convAround())
+
+		if u == ' ' && r == ' ' && d == ' ' && l == ' ' {
+			break
+		}
+
+		tile := tiles[py][px]
+
+		if tile != '-' && tile != '|' && tile != '+' {
+			result += string(tile)
+		}
+		if tile == 'U' {
+			break
+		}
+
+		if tile == '+' {
+			if !(sx == 0 && sy == 1) && u != ' ' && u != '-' {
+				sx, sy = 0, -1
+			} else if !(sx == 0 && sy == -1) && d != ' ' && d != '-' {
+				sx, sy = 0, 1
+			} else if !(sx == 1 && sy == 0) && l != ' ' && l != '|' {
+				sx, sy = -1, 0
+			} else if !(sx == -1 && sy == 0) && r != ' ' && r != '|' {
+				sx, sy = 1, 0
+			}
+		}
+
+		px += sx
+		py += sy
+		steps++
+	}
+
+	return strconv.Itoa(steps-1)
 }
 
 func readInput(fn string) [][]byte {
