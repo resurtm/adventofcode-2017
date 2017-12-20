@@ -6,11 +6,20 @@ import (
 	"os"
 	"path/filepath"
 	"bufio"
+	"math"
 )
 
 type testCase struct {
 	input  string
-	result int
+	result int64
+}
+
+type vector struct {
+	x, y, z int64
+}
+
+type particle struct {
+	p, v, a vector
 }
 
 var testCasesPartOne = []testCase{
@@ -47,9 +56,44 @@ func RunPartTwo() {
 
 func (tc *testCase) solvePartOne() int {
 	inputData := readInput(tc.input)
-	fmt.Println(inputData)
+	particles := []particle{}
+	for _, inputLine := range inputData {
+		part := particle{}
+		fmt.Sscanf(
+			inputLine,
+			"p=<%d,%d,%d>, v=<%d,%d,%d>, a=<%d,%d,%d>",
+			&part.p.x, &part.p.y, &part.p.z,
+			&part.v.x, &part.v.y, &part.v.z,
+			&part.a.x, &part.a.y, &part.a.z,
+		)
+		particles = append(particles, part)
+	}
 
-	return 0
+	for i := 0; i < 100000; i++ {
+		for i, part := range particles {
+			part.v.x += part.a.x
+			part.v.y += part.a.y
+			part.v.z += part.a.z
+			part.p.x += part.v.x
+			part.p.y += part.v.y
+			part.p.z += part.v.z
+			particles[i] = part
+		}
+	}
+
+	nearest := -1
+	minDistance := 0.0
+	firstItem := true
+	for i, part := range particles {
+		distance := math.Sqrt(float64(part.p.x*part.p.x + part.p.y*part.p.y + part.p.z*part.p.z))
+		if firstItem || minDistance > distance {
+			firstItem = false
+			nearest = i
+			minDistance = distance
+		}
+	}
+
+	return nearest
 }
 
 func (tc *testCase) solvePartTwo() int {
