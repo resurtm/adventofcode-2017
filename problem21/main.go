@@ -23,10 +23,11 @@ type convRule struct {
 
 var testCasesPartOne = []testCase{
 	{input: "input0.txt", iters: 2, result: 12},
-	{input: "input1.txt", iters: 5, result: -1},
+	{input: "input1.txt", iters: 5, result: 139},
 }
 
 var testCasesPartTwo = []testCase{
+	{input: "input1.txt", iters: 18, result: -1},
 }
 
 func RunPartOne() {
@@ -36,7 +37,7 @@ func RunPartOne() {
 		fmt.Printf("input     : %#v\n", v.input)
 		fmt.Printf("expected  : %d\n", v.result)
 		fmt.Print("result    : ")
-		fmt.Print(v.solvePartOne())
+		fmt.Print(v.solve())
 		fmt.Print("\n\n")
 	}
 }
@@ -48,12 +49,12 @@ func RunPartTwo() {
 		fmt.Printf("input     : %#v\n", v.input)
 		fmt.Printf("expected  : %d\n", v.result)
 		fmt.Print("result    : ")
-		fmt.Print(v.solvePartTwo())
+		fmt.Print(v.solve())
 		fmt.Print("\n\n")
 	}
 }
 
-func (tc *testCase) solvePartOne() int {
+func (tc *testCase) solve() int {
 	rules := parseRules(readInput(tc.input))
 
 	replace := func(subMat [][]byte) [][]byte {
@@ -142,10 +143,6 @@ func (tc *testCase) solvePartOne() int {
 		}
 	}
 	return stars
-}
-
-func (tc *testCase) solvePartTwo() int {
-	return 0
 }
 
 func printMat(inp [][]byte) {
