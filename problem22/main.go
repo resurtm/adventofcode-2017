@@ -15,7 +15,7 @@ type testCase struct {
 
 var testCasesPartOne = []testCase{
 	{input: "input0.txt", result: 5587},
-	//{input: "input1.txt", result: -1},
+	{input: "input1.txt", result: 5462},
 }
 
 var testCasesPartTwo = []testCase{
@@ -47,9 +47,65 @@ func RunPartTwo() {
 
 func (tc *testCase) solve() int {
 	inputData := readInput(tc.input)
-	fmt.Println(inputData)
+	gridSize := len(inputData[0])
+	constSize := 50000
+	halfSize := constSize / 2
+	grid := make([][]bool, constSize)
+	for i := 0; i < constSize; i++ {
+		grid[i] = make([]bool, constSize)
+	}
+	for j := 0; j < gridSize; j++ {
+		for i := 0; i < gridSize; i++ {
+			grid[j+halfSize][i+halfSize] = inputData[j][i] == '#'
+		}
+	}
 
-	return 0
+	result := 0
+	cx, cy, dir := int(gridSize/2)+halfSize, int(gridSize/2)+halfSize, 0
+	for iter := 0; iter < 10000; iter++ {
+		if grid[cy][cx] {
+			dir++
+			grid[cy][cx] = false
+		} else {
+			dir--
+			grid[cy][cx] = true
+			result++
+		}
+
+		if dir < 0 {
+			dir = 3
+		}
+		if dir > 3 {
+			dir = 0
+		}
+
+		switch dir {
+		case 0:
+			cy--
+		case 1:
+			cx++
+		case 2:
+			cy++
+		case 3:
+			cx--
+		}
+	}
+	return result
+}
+
+func printGrid(inp [][]bool) {
+	fmt.Println("==========")
+	for j := 0; j < len(inp); j++ {
+		for i := 0; i < len(inp[j]); i++ {
+			if inp[j][i] {
+				fmt.Print("#")
+			} else {
+				fmt.Print(".")
+			}
+		}
+		fmt.Println()
+	}
+	fmt.Println("==========")
 }
 
 func readInput(fn string) []string {
