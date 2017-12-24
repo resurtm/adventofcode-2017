@@ -63,41 +63,14 @@ var maxLength int
 
 func (tc *testCase) solvePartOne() int {
 	ports = parsePortTypes(readInput(tc.input))
-	maxAccum = -1
-	traversePortsPartOne(0, 0)
+	maxAccum, maxLength = -1,-1
+	traversePortsPartOne(0, 0, 0)
+	//fmt.Println(maxLength)
 	return maxAccum
 }
 
-func traversePortsPartOne(plug, accum int) {
+func traversePortsPartOne(plug, accum, length int) {
 	if maxAccum < accum {
-		maxAccum = accum
-	}
-	for i, port := range ports {
-		if port.used {
-			continue
-		}
-		if port.plug0 == plug {
-			ports[i].used = true
-			traversePortsPartOne(port.plug1, accum+port.plug0+port.plug1)
-			ports[i].used = false
-		}
-		if port.plug1 == plug {
-			ports[i].used = true
-			traversePortsPartOne(port.plug0, accum+port.plug0+port.plug1)
-			ports[i].used = false
-		}
-	}
-}
-
-func (tc *testCase) solvePartTwo() int {
-	ports = parsePortTypes(readInput(tc.input))
-	maxAccum, maxLength = -1, -1
-	traversePortsPartTwo(0, 0, 0)
-	return maxAccum
-}
-
-func traversePortsPartTwo(plug, accum, length int) {
-	if maxAccum < accum && maxLength <= length || maxLength < length {
 		maxAccum = accum
 		maxLength = length
 	}
@@ -107,12 +80,49 @@ func traversePortsPartTwo(plug, accum, length int) {
 		}
 		if port.plug0 == plug {
 			ports[i].used = true
-			traversePortsPartTwo(port.plug1, accum+port.plug0+port.plug1, length+1)
+			traversePortsPartOne(port.plug1, accum+port.plug0+port.plug1, length+1)
 			ports[i].used = false
 		}
 		if port.plug1 == plug {
 			ports[i].used = true
-			traversePortsPartTwo(port.plug0, accum+port.plug0+port.plug1, length+1)
+			traversePortsPartOne(port.plug0, accum+port.plug0+port.plug1, length+1)
+			ports[i].used = false
+		}
+	}
+}
+
+func (tc *testCase) solvePartTwo() int {
+	ports = parsePortTypes(readInput(tc.input))
+	maxAccum, maxLength = -1, -1
+	traversePortsPartTwo(0, 0, 0, []portType{})
+	//fmt.Println(maxLength)
+	return maxAccum
+}
+
+func traversePortsPartTwo(plug, accum, length int, prts []portType) {
+	if maxAccum < accum && maxLength <= length || maxLength < length {
+		maxAccum = accum
+		maxLength = length
+		//fmt.Println("-----")
+		//fmt.Println(length)
+		//fmt.Println(len(prts))
+		//for _, prt := range prts {
+		//	fmt.Print(strconv.Itoa(prt.plug0) + "/" + strconv.Itoa(prt.plug1) + ", ")
+		//}
+		//fmt.Println("-----")
+	}
+	for i, port := range ports {
+		if port.used {
+			continue
+		}
+		if port.plug0 == plug {
+			ports[i].used = true
+			traversePortsPartTwo(port.plug1, accum+port.plug0+port.plug1, length+1, append(prts, port))
+			ports[i].used = false
+		}
+		if port.plug1 == plug {
+			ports[i].used = true
+			traversePortsPartTwo(port.plug0, accum+port.plug0+port.plug1, length+1, append(prts, port))
 			ports[i].used = false
 		}
 	}
