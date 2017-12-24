@@ -6,6 +6,8 @@ import (
 	"os"
 	"path/filepath"
 	"bufio"
+	"strings"
+	"strconv"
 )
 
 type testCase struct {
@@ -13,9 +15,15 @@ type testCase struct {
 	result int
 }
 
+type portType struct {
+	plug0 int
+	plug1 int
+	used  bool
+}
+
 var testCasesPartOne = []testCase{
 	{input: "input0.txt", result: 31},
-	//{input: "input1.txt", result: -1},
+	{input: "input1.txt", result: 1940},
 }
 
 var testCasesPartTwo = []testCase{
@@ -45,13 +53,49 @@ func RunPartTwo() {
 	}
 }
 
+var ports []portType
+var maxAccum int
+
 func (tc *testCase) solvePartOne() int {
-	fmt.Println(readInput(tc.input))
-	return 0
+	ports = parsePortTypes(readInput(tc.input))
+	traversePorts(0, 0)
+	return maxAccum
+}
+
+func traversePorts(plug, accum int) {
+	if maxAccum < accum {
+		maxAccum = accum
+	}
+	for i, port := range ports {
+		if port.used {
+			continue
+		}
+		if port.plug0 == plug {
+			ports[i].used = true
+			traversePorts(port.plug1, accum+port.plug0+port.plug1)
+			ports[i].used = false
+		}
+		if port.plug1 == plug {
+			ports[i].used = true
+			traversePorts(port.plug0, accum+port.plug0+port.plug1)
+			ports[i].used = false
+		}
+	}
 }
 
 func (tc *testCase) solvePartTwo() int {
 	return 0
+}
+
+func parsePortTypes(inputData []string) []portType {
+	result := []portType{}
+	for _, inputItem := range inputData {
+		parts := strings.Split(inputItem, "/")
+		plug0, _ := strconv.Atoi(parts[0])
+		plug1, _ := strconv.Atoi(parts[1])
+		result = append(result, portType{plug0: plug0, plug1: plug1, used: false})
+	}
+	return result
 }
 
 func readInput(fn string) []string {
