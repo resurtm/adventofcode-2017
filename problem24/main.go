@@ -24,11 +24,13 @@ type portType struct {
 var testCasesPartOne = []testCase{
 	{input: "input0.txt", result: 31},
 	{input: "input1.txt", result: 1940},
+	{input: "input2.txt", result: -1}, // aragaer's input
 }
 
 var testCasesPartTwo = []testCase{
 	{input: "input0.txt", result: 19},
 	{input: "input1.txt", result: 1928},
+	{input: "input2.txt", result: -1}, // aragaer's input
 }
 
 func RunPartOne() {
@@ -95,7 +97,7 @@ func (tc *testCase) solvePartTwo() int {
 }
 
 func traversePortsPartTwo(plug, accum, length int) {
-	if maxAccum < accum && maxLength <= length {
+	if maxAccum < accum && maxLength <= length || maxLength < length {
 		maxAccum = accum
 		maxLength = length
 	}
