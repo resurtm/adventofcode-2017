@@ -27,6 +27,8 @@ var testCasesPartOne = []testCase{
 }
 
 var testCasesPartTwo = []testCase{
+	{input: "input0.txt", result: 19},
+	{input: "input1.txt", result: 1928},
 }
 
 func RunPartOne() {
@@ -55,14 +57,16 @@ func RunPartTwo() {
 
 var ports []portType
 var maxAccum int
+var maxLength int
 
 func (tc *testCase) solvePartOne() int {
 	ports = parsePortTypes(readInput(tc.input))
-	traversePorts(0, 0)
+	maxAccum = -1
+	traversePortsPartOne(0, 0)
 	return maxAccum
 }
 
-func traversePorts(plug, accum int) {
+func traversePortsPartOne(plug, accum int) {
 	if maxAccum < accum {
 		maxAccum = accum
 	}
@@ -72,19 +76,44 @@ func traversePorts(plug, accum int) {
 		}
 		if port.plug0 == plug {
 			ports[i].used = true
-			traversePorts(port.plug1, accum+port.plug0+port.plug1)
+			traversePortsPartOne(port.plug1, accum+port.plug0+port.plug1)
 			ports[i].used = false
 		}
 		if port.plug1 == plug {
 			ports[i].used = true
-			traversePorts(port.plug0, accum+port.plug0+port.plug1)
+			traversePortsPartOne(port.plug0, accum+port.plug0+port.plug1)
 			ports[i].used = false
 		}
 	}
 }
 
 func (tc *testCase) solvePartTwo() int {
-	return 0
+	ports = parsePortTypes(readInput(tc.input))
+	maxAccum, maxLength = -1, -1
+	traversePortsPartTwo(0, 0, 0)
+	return maxAccum
+}
+
+func traversePortsPartTwo(plug, accum, length int) {
+	if maxAccum < accum && maxLength <= length {
+		maxAccum = accum
+		maxLength = length
+	}
+	for i, port := range ports {
+		if port.used {
+			continue
+		}
+		if port.plug0 == plug {
+			ports[i].used = true
+			traversePortsPartTwo(port.plug1, accum+port.plug0+port.plug1, length+1)
+			ports[i].used = false
+		}
+		if port.plug1 == plug {
+			ports[i].used = true
+			traversePortsPartTwo(port.plug0, accum+port.plug0+port.plug1, length+1)
+			ports[i].used = false
+		}
+	}
 }
 
 func parsePortTypes(inputData []string) []portType {
